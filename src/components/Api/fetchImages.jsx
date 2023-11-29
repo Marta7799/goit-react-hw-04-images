@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 const API_KEY = '39809012-794bb9f85c23fb448d6e12ec5';
 
-export const fetchImages = (query, page, perPage) => {
+export const useFetch = (query, page, perPage) => {
   const [images, setImages] = useState([]);
 
   const [error, setIsError] = useState(false);

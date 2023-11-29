@@ -5,14 +5,14 @@ import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { useState, useEffect } from 'react';
-import { fetchImages } from './Api/fetchImages';
+import { useFetch } from './Api/fetchImages';
 
 export const App = () => {
   const [query, setQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [largeImage, setLargeImage] = useState('');
   const [page, setPage] = useState(1);
-  const { images, isLoading, clearImages } = fetchImages(query, page, 12);
+  const { images, isLoading, clearImages } = useFetch(query, page, 12);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -25,21 +25,21 @@ export const App = () => {
     form.reset();
   };
 
-  const handleModalClose = () => {
+  const closeModal = () => {
     setIsModalOpen(false);
   };
 
   useEffect(() => {
     document.addEventListener('keyup', e => {
       if (e.key === 'Escape') {
-        handleModalClose();
+        closeModal();
       }
     });
 
     return () => {
       document.removeEventListener('keyup', e => {
         if (e.key === 'Escape') {
-          handleModalClose();
+          closeModal();
         }
       });
     };
@@ -54,7 +54,7 @@ export const App = () => {
     setIsModalOpen(true);
   };
 
-  const handleClickMore = () => {
+  const loadMoreClick = () => {
     setPage(page + 1);
   };
 
@@ -68,7 +68,7 @@ export const App = () => {
       }}
     >
       {isModalOpen ? (
-        <Modal clickImage={largeImage} handleClose={handleModalClose} />
+        <Modal clickImage={largeImage} handleClose={closeModal} />
       ) : null}
       <Searchbar handleSubmit={handleSubmit} />
       {isLoading & (page <= 1) ? <Loader /> : null}
@@ -77,7 +77,7 @@ export const App = () => {
       </ImageGallery>
       {isLoading & (page >= 2) ? <Loader /> : null}
 
-      {images.length === 0 ? null : <Button handleClick={handleClickMore} />}
+      {images.length === 0 ? null : <Button handleClick={loadMoreClick} />}
     </div>
   );
 };
