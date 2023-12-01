@@ -30,19 +30,12 @@ export const App = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('keyup', e => {
-      if (e.key === 'Escape') {
+    const handleKeyDown = event => {
+      if (event.code === 'Escape') {
         closeModal();
       }
-    });
-
-    return () => {
-      document.removeEventListener('keyup', e => {
-        if (e.key === 'Escape') {
-          closeModal();
-        }
-      });
     };
+    window.addEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleImageClick = imageID => {
